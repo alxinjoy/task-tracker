@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html ng-app="taskTrackerApp">
+<head>
+    <title>Task Tracker - To Do List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="app.js"></script>
+</head>
+<body ng-controller="TaskController">
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Task Tracker</h1>
+
+        <!-- Task Form -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form ng-submit="addTask()">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Task Title" ng-model="newTask.title" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="Description" ng-model="newTask.description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" ng-model="newTask.priority">
+                            <option value="">Select Priority</option>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="date" class="form-control" ng-model="newTask.dueDate">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Task</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Filters and Search -->
+        <div class="mb-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Search by title" ng-model="searchText">
+                </div>
+                <div class="col-md-4">
+                    <select class="form-control" ng-model="statusFilter">
+                        <option value="">All Tasks</option>
+                        <option value="completed">Completed</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-danger" ng-click="clearAllTasks()">Clear All Tasks</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <div class="card mb-4" ng-repeat="task in tasks | filter:searchText | filter:statusFilterFn | orderBy:'dueDate'">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <input type="checkbox" ng-model="task.completed" ng-change="updateTask(task)">
+                        <span ng-class="{ 'completed-task': task.completed }">{{ task.title }}</span>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-warning" ng-click="editTask(task)">Edit</button>
+                        <button class="btn btn-sm btn-danger" ng-click="deleteTask(task._id)">Delete</button>
+                    </div>
+                </div>
+                <p ng-if="task.description" class="mt-2">{{ task.description }}</p>
+                <p ng-if="task.priority" class="text-muted">Priority: {{ task.priority }}</p>
+                <p ng-if="task.dueDate" class="text-muted">Due: {{ task.dueDate | date:'mediumDate' }}</p>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div class="modal" ng-show="showEditModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Task</h5>
+                        <button class="close" ng-click="closeEditModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form ng-submit="saveTask()">
+                            <div class="form-group">
+                                <input type="text" class="form-control" ng-model="editTaskData.title" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" ng-model="editTaskData.description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" ng-model="editTaskData.priority">
+                                    <option value="">Select Priority</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="date" class="form-control" ng-model="editTaskData.dueDate">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button class="btn btn-secondary" ng-click="closeEditModal()">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
