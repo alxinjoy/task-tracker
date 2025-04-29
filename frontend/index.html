@@ -3,110 +3,214 @@
 <head>
     <title>Task Tracker - To Do List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
     <link rel="stylesheet" href="styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="app.js"></script>
 </head>
-<body ng-controller="TaskController">
-    <div class="container mt-4">
-        <h1 class="text-center mb-4">Task Tracker</h1>
-
-        <!-- Task Form -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <form ng-submit="addTask()">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Task Title" ng-model="newTask.title" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" placeholder="Description" ng-model="newTask.description"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <select class="form-control" ng-model="newTask.priority">
-                            <option value="">Select Priority</option>
-                            <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
-                            <option value="High">High</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <input type="date" class="form-control" ng-model="newTask.dueDate">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Task</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Filters and Search -->
-        <div class="mb-4">
-            <div class="row">
-                <div class="col-md-4">
-                    <input type="text" class="form-control" placeholder="Search by title" ng-model="searchText">
+<body ng-controller="TaskController" class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="app-header text-center mb-5">
+                    <h1 class="display-4 text-primary"><i class="fas fa-check-circle mr-2"></i>Task Tracker</h1>
+                    <p class="text-muted">Organize your tasks efficiently and boost your productivity</p>
                 </div>
-                <div class="col-md-4">
-                    <select class="form-control" ng-model="statusFilter">
-                        <option value="">All Tasks</option>
-                        <option value="completed">Completed</option>
-                        <option value="pending">Pending</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <button class="btn btn-danger" ng-click="clearAllTasks()">Clear All Tasks</button>
-                </div>
-            </div>
-        </div>
 
-        <!-- Task List -->
-        <div class="card mb-4" ng-repeat="task in tasks | filter:searchText | filter:statusFilterFn | orderBy:'dueDate'">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <input type="checkbox" ng-model="task.completed" ng-change="updateTask(task)">
-                        <span ng-class="{ 'completed-task': task.completed }">{{ task.title }}</span>
+                <!-- Task Form -->
+                <div class="card shadow-sm mb-4 border-0 rounded-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-plus-circle mr-2"></i>Add New Task</h5>
                     </div>
-                    <div>
-                        <button class="btn btn-sm btn-warning" ng-click="editTask(task)">Edit</button>
-                        <button class="btn btn-sm btn-danger" ng-click="deleteTask(task._id)">Delete</button>
-                    </div>
-                </div>
-                <p ng-if="task.description" class="mt-2">{{ task.description }}</p>
-                <p ng-if="task.priority" class="text-muted">Priority: {{ task.priority }}</p>
-                <p ng-if="task.dueDate" class="text-muted">Due: {{ task.dueDate | date:'mediumDate' }}</p>
-            </div>
-        </div>
-
-        <!-- Edit Modal -->
-        <div class="modal" ng-show="showEditModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Edit Task</h5>
-                        <button class="close" ng-click="closeEditModal()">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <form ng-submit="saveTask()">
+                    <div class="card-body">
+                        <form ng-submit="addTask()">
                             <div class="form-group">
-                                <input type="text" class="form-control" ng-model="editTaskData.title" required>
+                                <label><i class="fas fa-tasks mr-1"></i>Task Title</label>
+                                <input type="text" class="form-control" placeholder="What needs to be done?" ng-model="newTask.title" required>
                             </div>
-                            <div class="form-group">
-                                <textarea class="form-control" ng-model="editTaskData.description"></textarea>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-align-left mr-1"></i>Description</label>
+                                        <textarea class="form-control" placeholder="Add details about this task" ng-model="newTask.description" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-flag mr-1"></i>Priority</label>
+                                        <select class="form-control" ng-model="newTask.priority">
+                                            <option value="">Select Priority</option>
+                                            <option value="Low">Low</option>
+                                            <option value="Medium">Medium</option>
+                                            <option value="High">High</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><i class="far fa-calendar-alt mr-1"></i>Due Date</label>
+                                        <input type="date" class="form-control" ng-model="newTask.dueDate">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <select class="form-control" ng-model="editTaskData.priority">
-                                    <option value="">Select Priority</option>
-                                    <option value="Low">Low</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="High">High</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <input type="date" class="form-control" ng-model="editTaskData.dueDate">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button class="btn btn-secondary" ng-click="closeEditModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-plus mr-1"></i>Add Task</button>
                         </form>
+                    </div>
+                </div>
+
+                <!-- Filters and Search -->
+                <div class="card shadow-sm mb-4 border-0 rounded-lg">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Search tasks" ng-model="searchText">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-white"><i class="fas fa-filter"></i></span>
+                                    </div>
+                                    <select class="form-control" ng-model="statusFilter">
+                                        <option value="">All Tasks</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="pending">Pending</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-danger btn-block" ng-click="clearAllTasks()">
+                                    <i class="fas fa-trash-alt mr-1"></i>Clear All Tasks
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task Statistics -->
+                <div class="task-stats mb-4">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm rounded-lg bg-success text-white">
+                                <div class="card-body py-3">
+                                    <h5><i class="fas fa-check-circle mr-1"></i>Completed</h5>
+                                    <h3>{{ (tasks | filter:{completed:true}).length }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm rounded-lg bg-warning text-white">
+                                <div class="card-body py-3">
+                                    <h5><i class="fas fa-hourglass-half mr-1"></i>Pending</h5>
+                                    <h3>{{ (tasks | filter:{completed:false}).length }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm rounded-lg bg-info text-white">
+                                <div class="card-body py-3">
+                                    <h5><i class="fas fa-tasks mr-1"></i>Total</h5>
+                                    <h3>{{ tasks.length }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task List -->
+                <div class="task-list">
+                    <h4 class="mb-3 text-muted"><i class="fas fa-list-ul mr-2"></i>Your Tasks</h4>
+                    <div class="card shadow-sm mb-3 border-0 rounded-lg task-card" ng-repeat="task in tasks | filter:searchText | filter:statusFilterFn | orderBy:'dueDate'">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="task-details">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="task-{{$index}}" ng-model="task.completed" ng-change="updateTask(task)">
+                                        <label class="custom-control-label task-title" for="task-{{$index}}" ng-class="{ 'completed-task': task.completed }">
+                                            {{ task.title }}
+                                            <span class="badge ml-2" ng-class="{
+                                                'badge-danger': task.priority === 'High',
+                                                'badge-warning': task.priority === 'Medium',
+                                                'badge-info': task.priority === 'Low'
+                                            }" ng-if="task.priority">{{ task.priority }}</span>
+                                        </label>
+                                    </div>
+                                    <p ng-if="task.description" class="mt-2 task-description text-muted">{{ task.description }}</p>
+                                    <div class="task-meta mt-2" ng-if="task.dueDate">
+                                        <small class="text-muted">
+                                            <i class="far fa-calendar-alt mr-1"></i>Due: {{ task.dueDate | date:'mediumDate' }}
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="task-actions">
+                                    <button class="btn btn-sm btn-outline-primary mr-1" ng-click="editTask(task)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" ng-click="deleteTask(task._id)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Empty state -->
+                    <div class="text-center py-5" ng-if="tasks.length === 0">
+                        <img src="/api/placeholder/150/150" alt="No tasks" class="mb-3">
+                        <h5>No tasks found</h5>
+                        <p class="text-muted">Add a new task to get started</p>
+                    </div>
+                </div>
+
+                <!-- Edit Modal -->
+                <div class="modal" ng-show="showEditModal">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 shadow">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title"><i class="fas fa-edit mr-2"></i>Edit Task</h5>
+                                <button class="close text-white" ng-click="closeEditModal()">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form ng-submit="saveTask()">
+                                    <div class="form-group">
+                                        <label>Task Title</label>
+                                        <input type="text" class="form-control" ng-model="editTaskData.title" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <textarea class="form-control" ng-model="editTaskData.description" rows="3"></textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Priority</label>
+                                                <select class="form-control" ng-model="editTaskData.priority">
+                                                    <option value="">Select Priority</option>
+                                                    <option value="Low">Low</option>
+                                                    <option value="Medium">Medium</option>
+                                                    <option value="High">High</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Due Date</label>
+                                                <input type="date" class="form-control" ng-model="editTaskData.dueDate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer px-0 pb-0">
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-save mr-1"></i>Save</button>
+                                        <button type="button" class="btn btn-secondary" ng-click="closeEditModal()"><i class="fas fa-times mr-1"></i>Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
