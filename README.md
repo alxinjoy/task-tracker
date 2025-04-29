@@ -35,22 +35,29 @@ Built using **AngularJS**, **Node.js**, **Express**, and **MongoDB Atlas**.
 ## ⚙️ How to Run Locally
 
 1. Clone the repository:
-   git clone https://github.com/your-username/task-tracker.git
-   cd task-tracker
+   
+   git clone https://github.com/alxinjoy/task-tracker.git
+   
+2. in terminal/cmd type :
+   
+      cd task-tracker
 
-2. Install backend dependencies:
-   cd task-tracker
+3. Install backend dependencies:
+ 
+   also in terminal/cmd type:
+    
    npm install
    
-3. Setup MongoDB Atlas:
-   - Update your MongoDB URI inside `server.js`.
+4. Setup MongoDB Atlas:
+ 
+    Update your MongoDB URI inside `server.js`.
 
-4. Start the backend server:
+5. Start the backend server:
    
    npm start
 
 
-5. Open `frontend/index.html` in your browser.
+6. Open `frontend/index.html` in your browser.
 
 
 
