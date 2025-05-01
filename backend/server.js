@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB Atlas connection (replace with your connection string)
-mongoose.connect('mongodb+srv://tasktrack:fasttrack@tasktracker.cp8t16c.mongodb.net/?retryWrites=true&w=majority&appName=TaskTracker', {
+mongoose.connect('mongodb+srv://tasktrack:<db_password>@tasktracker.cp8t16c.mongodb.net/?retryWrites=true&w=majority&appName=TaskTracker', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
